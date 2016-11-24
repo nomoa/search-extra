@@ -3,10 +3,15 @@ package org.wikimedia.search.extra.regex;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
-import org.elasticsearch.common.logging.ESLogger;
+import org.apache.logging.log4j.Logger;
 import org.elasticsearch.common.logging.ESLoggerFactory;
+import org.elasticsearch.index.query.Operator;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.QueryStringQueryBuilder;
 import org.junit.Test;
 import org.wikimedia.search.extra.regex.SourceRegexQuery.NonBacktrackingOnTheFlyCaseConvertingRechecker;
 import org.wikimedia.search.extra.regex.SourceRegexQuery.NonBacktrackingRechecker;
@@ -19,11 +24,19 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.io.Resources;
 
 public class SourceRegexQueryRecheckTest {
-    private static final ESLogger log = ESLoggerFactory.getLogger(SourceRegexQueryRecheckTest.class.getPackage().getName());
+    private static final Logger log = ESLoggerFactory.getLogger(SourceRegexQueryRecheckTest.class.getPackage().getName());
 
     private final String rashidun;
     private final String obama;
 
+    public void test() {
+        Map<String, Float> fields = new HashMap<>();
+        fields.put("plain", 1f);
+        fields.put("text", 0.5f);
+        
+        QueryStringQueryBuilder builder = QueryBuilders.queryStringQuery("ai du").fields(fields).defaultOperator(Operator.AND);
+        builder.toQuery()
+    }
     public SourceRegexQueryRecheckTest() throws IOException {
         rashidun = Resources.toString(Resources.getResource("Rashidun Caliphate.txt"), Charsets.UTF_8);
         obama = Resources.toString(Resources.getResource("Barack Obama.txt"), Charsets.UTF_8);

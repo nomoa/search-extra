@@ -13,13 +13,13 @@ import org.apache.lucene.search.Scorer;
 import org.apache.lucene.search.Weight;
 import org.apache.lucene.util.mutable.MutableValueInt;
 import org.wikimedia.search.extra.regex.SourceRegexQuery.Rechecker;
-import org.wikimedia.search.extra.regex.SourceRegexQuery.Settings;
+import org.wikimedia.search.extra.regex.SourceRegexQueryBuilder.Settings;
 import org.wikimedia.search.extra.util.FieldValues.Loader;
 
 /**
  * Accelerated version of the source_regex query.
  */
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper=true)
 class AcceleratedSourceRegexQuery extends UnacceleratedSourceRegexQuery {
     private final Query approximation;
 
@@ -69,5 +69,4 @@ class AcceleratedSourceRegexQuery extends UnacceleratedSourceRegexQuery {
     public String toString(String field) {
         return "source_regex(accelerated):" + field;
     }
-
 }

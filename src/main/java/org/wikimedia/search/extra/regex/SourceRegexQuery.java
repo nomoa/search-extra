@@ -3,7 +3,6 @@ package org.wikimedia.search.extra.regex;
 import java.io.IOException;
 import java.util.Locale;
 
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.search.Query;
@@ -12,13 +11,14 @@ import org.apache.lucene.util.automaton.Automaton;
 import org.apache.lucene.util.automaton.CharacterRunAutomaton;
 import org.apache.lucene.util.automaton.RegExp;
 import org.elasticsearch.common.lucene.search.Queries;
+import org.wikimedia.search.extra.regex.SourceRegexQueryBuilder.Settings;
 import org.wikimedia.search.extra.regex.expression.Expression;
 import org.wikimedia.search.extra.regex.expression.ExpressionRewriter;
 import org.wikimedia.search.extra.regex.ngram.AutomatonTooComplexException;
 import org.wikimedia.search.extra.regex.ngram.NGramExtractor;
 import org.wikimedia.search.extra.util.FieldValues;
 
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper=false)
 public class SourceRegexQuery extends Query {
     private final String fieldPath;
     private final String ngramFieldPath;
@@ -70,7 +70,7 @@ public class SourceRegexQuery extends Query {
                 }
                 return new UnacceleratedSourceRegexQuery(rechecker, fieldPath, loader, settings).rewrite(reader);
             } else if (expression.alwaysFalse()) {
-                return Queries.newMatchNoDocsQuery().rewrite(reader);
+                return Queries.newMatchNoDocsQuery("Expression is always false").rewrite(reader);
             } else {
                 if(expression.countClauses() > settings.getMaxNgramClauses()) {
                     // The expression is too large we will try to use a degraded disjunction
@@ -287,23 +287,5 @@ public class SourceRegexQuery extends Query {
             b.append('~').append(ngramFieldPath);
         }
         return b.toString();
-    }
-
-    @Data
-    public static class Settings {
-        private int maxExpand = 4;
-        private int maxStatesTraced = 10000;
-        private int maxDeterminizedStates = 20000;
-        private int maxNgramsExtracted = 100;
-        /**
-         * @deprecated use a generic time limiting collector
-         */
-        @Deprecated
-        private int maxInspect = Integer.MAX_VALUE;
-        private boolean caseSensitive = false;
-        private Locale locale = Locale.ROOT;
-        private boolean rejectUnaccelerated = false;
-        private int maxNgramClauses = ExpressionRewriter.MAX_BOOLEAN_CLAUSES;
-
     }
 }

@@ -9,10 +9,6 @@ Filters:
 * [source_regex](docs/source_regex.md) - An nGram accelerated regular
 expression filter that is generally much much faster than sequentially checking
 all documents.
-* [id_hash_mod](docs/id_hash_mod.md) - Filter used to select all documents
-independantly. For example, it can be used by multiple processes to reindex
-all documents without any interprocess communication. Added in 1.5.0, 1.4.1,
-and 1.3.0.
 
 Native Scripts:
 * [super_detect_noop](docs/super_detect_noop.md) - Like ```detect_noop``` but

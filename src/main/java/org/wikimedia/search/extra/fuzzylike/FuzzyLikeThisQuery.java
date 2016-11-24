@@ -47,6 +47,8 @@ import org.apache.lucene.util.BytesRef;
 import org.apache.lucene.util.IOUtils;
 import org.apache.lucene.util.PriorityQueue;
 
+import lombok.EqualsAndHashCode;
+
 /**
  * Fuzzifies ALL terms provided as strings and then picks the best n differentiating terms.
  * In effect this mixes the behaviour of FuzzyQuery and MoreLikeThis but with special consideration
@@ -62,6 +64,7 @@ import org.apache.lucene.util.PriorityQueue;
  * term) and this is factored into the variant's boost. If the source query term does not exist in the
  * index the average IDF of the variants is used.
  */
+@EqualsAndHashCode(callSuper=false, of={"analyzer", "fieldVals", "ignoreTF", "maxNumTerms"})
 public class FuzzyLikeThisQuery extends Query
 {
     // TODO: generalize this query (at least it should not reuse this static sim!
@@ -76,48 +79,6 @@ public class FuzzyLikeThisQuery extends Query
     int MAX_VARIANTS_PER_TERM=50;
     boolean ignoreTF=false;
     private int maxNumTerms;
-
-    @Override
-    public int hashCode() {
-      final int prime = 31;
-      int result = super.hashCode();
-      result = prime * result + ((analyzer == null) ? 0 : analyzer.hashCode());
-      result = prime * result
-          + ((fieldVals == null) ? 0 : fieldVals.hashCode());
-      result = prime * result + (ignoreTF ? 1231 : 1237);
-      result = prime * result + maxNumTerms;
-      return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-      if (this == obj)
-        return true;
-      if (obj == null)
-        return false;
-      if (getClass() != obj.getClass())
-        return false;
-      if (!super.equals(obj)) {
-        return false;
-      }
-      FuzzyLikeThisQuery other = (FuzzyLikeThisQuery) obj;
-      if (analyzer == null) {
-        if (other.analyzer != null)
-          return false;
-      } else if (!analyzer.equals(other.analyzer))
-        return false;
-      if (fieldVals == null) {
-        if (other.fieldVals != null)
-          return false;
-      } else if (!fieldVals.equals(other.fieldVals))
-        return false;
-      if (ignoreTF != other.ignoreTF)
-        return false;
-      if (maxNumTerms != other.maxNumTerms)
-        return false;
-      return true;
-    }
-
 
     /**
      *
@@ -330,9 +291,6 @@ public class FuzzyLikeThisQuery extends Query
         Query q = bool;
         if(bool.clauses().isEmpty()) {
             return new MatchNoDocsQuery();
-        }
-        if(getBoost() != 1f) {
-            q = new BoostQuery(q, getBoost());
         }
         return q;
     }

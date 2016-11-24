@@ -1,5 +1,6 @@
 package org.wikimedia.search.extra.regex;
 
+
 import java.io.IOException;
 import java.util.List;
 
@@ -15,7 +16,7 @@ import org.apache.lucene.search.TwoPhaseIterator;
 import org.apache.lucene.search.Weight;
 import org.apache.lucene.util.mutable.MutableValueInt;
 import org.wikimedia.search.extra.regex.SourceRegexQuery.Rechecker;
-import org.wikimedia.search.extra.regex.SourceRegexQuery.Settings;
+import org.wikimedia.search.extra.regex.SourceRegexQueryBuilder.Settings;
 import org.wikimedia.search.extra.util.FieldValues;
 import org.wikimedia.search.extra.util.FieldValues.Loader;
 
@@ -23,7 +24,7 @@ import org.wikimedia.search.extra.util.FieldValues.Loader;
  * Unaccelerated source_regex query.
  * It will scan all the docs in the index.
  */
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper=false)
 class UnacceleratedSourceRegexQuery extends Query {
     protected final Rechecker rechecker;
     protected final String fieldPath;
