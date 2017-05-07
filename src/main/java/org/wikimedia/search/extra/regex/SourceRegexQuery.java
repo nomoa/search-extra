@@ -1,6 +1,8 @@
 package org.wikimedia.search.extra.regex;
 
+import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.search.Query;
@@ -21,6 +23,7 @@ import java.util.Locale;
 import java.util.Objects;
 
 @EqualsAndHashCode(callSuper = false)
+@Getter(AccessLevel.PACKAGE)
 public class SourceRegexQuery extends Query {
     private final String fieldPath;
     private final String ngramFieldPath;
